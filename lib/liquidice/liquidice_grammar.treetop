@@ -78,28 +78,16 @@ grammar LiquidiceGrammar
   end
 
   rule attr_name
-    /[^\s"'>\/=\p{Control}]+/
-  end
 
   rule attr_unquoted_value
-    /[^\s"'=<>`]+/
-  end
 
   rule attr_single_quoted_value
-    /[^']*/
-  end
 
   rule attr_double_quoted_value
-    /[^"]*/
-  end
 
   rule alphabets
-    /[a-zA-Z]/
-  end
 
   rule digits
-    /[0-9]/
-  end
 
   rule ws
     /\s/

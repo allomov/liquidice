@@ -2,20 +2,21 @@ require 'treetop'
 
 module Liquidice
   class Parser
+    Treetop.load(File.expand_path(File.join(File.dirname(__FILE__), 'liquidice_grammar.treetop')))
+
+    attr_accessor :strict_mode, :parser, :ast
+
     def initialize(strict_mode: false)
       @strict_mode = strict_mode
+      @parser = LiquidiceGrammarParser.new
     end
 
     def parse_from_wysiwyg(wysiwyg_template)
-      # Parse the WYSIWYG template using the Liquidice grammar
-      parser = LiquidiceGrammarParser.new
-      ast = parser.parse(wysiwyg_template)
+      @ast = parser.parse(wysiwyg_template)
 
-      if ast.nil?
-        raise "Invalid WYSIWYG template"
-      end
+      raise Liquidice::Errors::InvalidWysiwygTemplate, parser.failure_reason if @ast.nil?
 
-      ast
+      @ast
     end
 
     def transform_to_liquid(ast)
