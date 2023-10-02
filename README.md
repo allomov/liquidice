@@ -1,6 +1,6 @@
 # Liquidice
 
-Liquidice gem (Liquid-I-See) to indicate that it is related to part "What I See" of WYSIWYG abbreviation.
+Liquidice (Liquid-I-See) to indicate that it is related to part "What I See" of WYSIWYG abbreviation.
 
 Use WYSIWYG editor output with the Liquid templating engine.
 

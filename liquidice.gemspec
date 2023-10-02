@@ -9,8 +9,11 @@ Gem::Specification.new do |spec|
   spec.version       = Liquidice::Version::STRING
   spec.authors       = ['Aliaksandr Lomau']
   spec.email         = ['aliaksandr.lomau@gmail.com']
-  spec.summary       = 'A gem that allows the use of Liquid templates with WYSIWYG editor output'
-  spec.description   = 'A gem that enables the use of Liquid templates with WYSIWYG editor output by transforming the output to a valid Liquid template'
+  spec.summary       = 'Allows the use of Liquid templates with WYSIWYG editor output'
+  spec.description   = <<~EOF
+    Liquidice (Liquid-I-See) - enables the use of Liquid templates with WYSIWYG editor output by transforming
+    the output to a valid Liquid template
+  EOF
   spec.homepage      = 'https://github.com/allomov/liquidice'
   spec.license       = 'MIT'
 
