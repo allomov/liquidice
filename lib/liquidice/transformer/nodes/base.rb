@@ -5,7 +5,7 @@ module Liquidice
       class Base
         attr_reader :original_text, :children, :options
 
-        def intialize(original_text:, children: [], options: {})
+        def initialize(original_text:, children: [], options: {})
           @original_text, @children, @options = original_text, children, options
 
           validate!
@@ -21,6 +21,10 @@ module Liquidice
 
         def validate!
           # do nothing
+        end
+
+        def can_be_merged?(other)
+          false
         end
       end
     end

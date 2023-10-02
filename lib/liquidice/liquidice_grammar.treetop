@@ -4,22 +4,22 @@ grammar LiquidiceGrammar
   end
 
   rule liquid_template_interpolation
-    liquid_open_delimiter content_with_tags liquid_close_delimiter <Liquidice::TreetopNodes::LiquidTemplateInterpolation>
+    liquid_open_delimeter content_with_tags liquid_close_delimeter <Liquidice::TreetopNodes::LiquidTemplateInterpolation>
   end
 
-  rule liquid_open_delimiter
-    liquid_open_delimiter_start html_tag* (liquid_open_delimiter_start / '%')
+  rule liquid_open_delimeter
+    liquid_open_delimeter_start html_tag* (liquid_open_delimeter_start / '%')
   end
 
-  rule liquid_close_delimiter
-    (liquid_close_delimiter_end / '%') html_tag* liquid_close_delimiter_end
+  rule liquid_close_delimeter
+    (liquid_close_delimeter_end / '%') html_tag* liquid_close_delimeter_end
   end
 
-  rule liquid_open_delimiter_start
+  rule liquid_open_delimeter_start
     '{'
   end
 
-  rule liquid_close_delimiter_end
+  rule liquid_close_delimeter_end
     '}'
   end
 
@@ -32,19 +32,20 @@ grammar LiquidiceGrammar
   end
 
   rule html_tag
-    (tag_open / tag_empty / tag_close) <Liquidice::TreetopNodes::HtmlTag>
+    # TODO: we need to add spaces here because of the way treetop works
+    (tag_open / tag_empty / tag_close / spaces)
   end
 
   rule tag_open
-    '<' tag_name spaces* attr_list? '>'
+    '<' tag_name spaces* attr_list? '>' <Liquidice::TreetopNodes::HtmlTag>
   end
 
   rule tag_empty
-    '<' tag_name spaces* attr_list? '/>'
+    '<' tag_name spaces* attr_list? '/>' <Liquidice::TreetopNodes::HtmlTag>
   end
 
   rule tag_close
-    '</' spaces* tag_name '>'
+    '</' spaces* tag_name '>' <Liquidice::TreetopNodes::HtmlTag>
   end
 
   rule tag_name
@@ -69,10 +70,10 @@ grammar LiquidiceGrammar
   end
 
   rule spaces
-    [ \t\r\n]+
+    [ \s\t\r\n]+
   end
 
   rule dash
-    '-'
+    "-"
   end
 end

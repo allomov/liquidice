@@ -2,7 +2,7 @@ module Liquidice
   module TreetopNodes
     class HtmlTag < ::Liquidice::TreetopNodes::Base
       def to_transformer_node
-        ::Liquidice::Transformer::Nodes::Tag.new(
+        ::Liquidice::Transformer::Nodes::HtmlTag.new(
           original_text: text_value,
           options: {
             type: transformer_tag_type,
@@ -11,7 +11,7 @@ module Liquidice
       end
 
       def transformer_tag_type
-        ::Liquidice::Transformer::Nodes::Tag::OPENING_TYPE
+        ::Liquidice::Transformer::Nodes::HtmlTag::OPENING_TYPE
       end
     end
   end
