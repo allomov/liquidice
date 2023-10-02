@@ -46,16 +46,22 @@ HTML
 parser = Liquidice::Parser.new(strict_mode: true)
 
 # Parse WYSIWYG output to AST
-ast = parser.parse_from_wysiwyg(wysiwyg_liquid_template)
+ast = parser.parse(wysiwyg_liquid_template)
 
 # Transform AST to Liquid-compatible code
-valid_liquid_template = parser.transform_to_liquid(ast)
+valid_liquid_template = parser.transform(ast)
 
 # OR Do both in one step
-valid_liquid_template = parser.parse_and_transform("<p>{{content}}</p>")
+valid_liquid_template = parser.parse_and_transform(wysiwyg_liquid_template)
 
 puts valid_liquid_template
 # <div class="wrapper"><div class="c1"></div><div class="c2"><div class="c3">{{ varName  }}</div></div><div></div>
+```
+
+```ruby
+require "liquidice"
+parser = Liquidice::Parser.new
+parser.parse("<div/>")
 ```
 
 ### Other information
@@ -66,11 +72,11 @@ BNF will look in the following way:
 liquid-template := (liquid-tag | liquid-text)*
 
 body := (liquid-interpolation-content | content-with-tags)*
-liquid-interpolation-content := liquid-open-delimeter content-with-tags liquid-close-delimeter
-liquid-open-delimeter := liquid-open-delimeter-start any-tag* (liquid-open-delimeter-start | "%")
-liquid-close-delimeter := (liquid-close-delimeter-end | "%") any-tag* liquid-close-delimeter-end
-liquid-open-delimeter-start := "{"
-liquid-close-delimeter-end := "}"
+liquid-interpolation-content := liquid-open-delimiter content-with-tags liquid-close-delimiter
+liquid-open-delimiter := liquid-open-delimiter-start any-tag* (liquid-open-delimiter-start | "%")
+liquid-close-delimiter := (liquid-close-delimiter-end | "%") any-tag* liquid-close-delimiter-end
+liquid-open-delimiter-start := "{"
+liquid-close-delimiter-end := "}"
 
 content-with-tags := (any-tag | text-content)*
 text-content := (alphabets | digits | dash | ws)*

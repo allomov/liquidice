@@ -1,38 +1,38 @@
 grammar LiquidiceGrammar
   rule liquid_template
-    (liquid_template_interpolation / content_with_tags)+
+    (liquid_template_interpolation / content_with_tags)+ <Liquidice::TreetopNodes::LiquidTemplate>
   end
 
   rule liquid_template_interpolation
-    liquid_open_delimeter content_with_tags liquid_close_delimeter
+    liquid_open_delimiter content_with_tags liquid_close_delimiter <Liquidice::TreetopNodes::LiquidTemplateInterpolation>
   end
 
-  rule liquid_open_delimeter
-    liquid_open_delimeter_start tag* (liquid_open_delimeter_start / '%')
+  rule liquid_open_delimiter
+    liquid_open_delimiter_start html_tag* (liquid_open_delimiter_start / '%')
   end
 
-  rule liquid_close_delimeter
-    (liquid_close_delimeter_end / '%') tag* liquid_close_delimeter_end
+  rule liquid_close_delimiter
+    (liquid_close_delimiter_end / '%') html_tag* liquid_close_delimiter_end
   end
 
-  rule liquid_open_delimeter_start
+  rule liquid_open_delimiter_start
     '{'
   end
 
-  rule liquid_close_delimeter_end
+  rule liquid_close_delimiter_end
     '}'
   end
 
   rule content_with_tags
-    (tag / text_content)+
+    (html_tag / text_content)+
   end
 
   rule text_content
     (alphabets / digits / dash / spaces)+
   end
 
-  rule tag
-    (tag_open / tag_empty / tag_close)
+  rule html_tag
+    (tag_open / tag_empty / tag_close) <Liquidice::TreetopNodes::HtmlTag>
   end
 
   rule tag_open
@@ -73,6 +73,6 @@ grammar LiquidiceGrammar
   end
 
   rule dash
-    "-"
+    '-'
   end
 end

@@ -1,5 +1,3 @@
-require 'treetop'
-
 module Liquidice
   class Parser
     Treetop.load(File.expand_path(File.join(File.dirname(__FILE__), 'liquidice_grammar.treetop')))
@@ -11,23 +9,21 @@ module Liquidice
       @parser = LiquidiceGrammarParser.new
     end
 
-    def parse_from_wysiwyg(wysiwyg_template)
+    def parse(wysiwyg_template)
       @ast = parser.parse(wysiwyg_template)
 
-      raise Liquidice::Errors::InvalidWysiwygTemplate, parser.failure_reason if @ast.nil?
+      raise Liquidice::Errors::InvalidSyntax, parser.failure_reason if @ast.nil? && strict_mode
 
       @ast
     end
 
-    def transform_to_liquid(ast)
-      # Transform the AST to a valid Liquid template
-      transformer = Transformer.new
-      transformer.apply(ast)
+    def transform(ast)
+      root_node = ast&.to_transformer_node
+      root_node&.transformer_text_value
     end
 
     def parse_and_transform(wysiwyg_template)
-      ast = parse_from_wysiwyg(wysiwyg_template)
-      transform_to_liquid(ast)
+      transform(parse(wysiwyg_template))
     end
   end
 end

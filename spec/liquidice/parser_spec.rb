@@ -8,7 +8,7 @@ RSpec.describe Liquidice::Parser do
       it 'returns the AST' do
         wysiwyg_template = '<div class="wrapper">{<div class="c1"></div><div class="c2">{ v</div>a<div class="c3">rName</div>  }<div>}</div>'
 
-        ast = parser.parse_from_wysiwyg(wysiwyg_template)
+        ast = parser.parse(wysiwyg_template)
 
         expect(ast).not_to be_nil
       end
@@ -18,7 +18,7 @@ RSpec.describe Liquidice::Parser do
       it 'raises an error' do
         wysiwyg_template = '<div class="wrapper">{<div class="c1"></div><div class="c2">{ v</div>a<div class="c3">rName</div>  }<div>'
 
-        expect { parser.parse_from_wysiwyg(wysiwyg_template) }.to raise_error('Invalid WYSIWYG template')
+        expect { parser.parse(wysiwyg_template) }.to raise_error Liquidice::Errors::InvalidSyntax
       end
     end
   end

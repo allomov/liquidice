@@ -1,5 +1,7 @@
 module Liquidice
   module Errors
-    class InvalidWysiwygTemplate < StandardError; end
+    class Base < StandardError; end
+    class InvalidSyntax < Base; end
+    class TransformerValidationError < Base; end
   end
 end
