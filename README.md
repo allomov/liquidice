@@ -42,14 +42,16 @@ This modified template is now a valid Liquid template.
 wysiwyg_liquid_template = <<~HTML
   <div class="wrapper">{<div class="c1"></div><div class="c2">{ v</div>a<div class="c3">rName</div>  }<div>}</div>
 HTML
-# Initialize the parser
-parser = Liquidice::Parser.new(strict_mode: true)
 
 # Parse WYSIWYG output to AST
+parser = Liquidice::Parser.new(strict_mode: true)
 ast = parser.parse(wysiwyg_liquid_template)
 
 # Transform AST to Liquid-compatible code
-valid_liquid_template = parser.transform(ast)
+transformer = Liquidice::Transformer::Transformer.new
+transformer_tree = transformer.apply(ast)
+transformer_tree.transform!
+valid_liquid_template = transformer_tree.to_s
 
 # OR Do both in one step
 valid_liquid_template = parser.parse_and_transform(wysiwyg_liquid_template)

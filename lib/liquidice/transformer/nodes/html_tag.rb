@@ -28,6 +28,10 @@ module Liquidice
         def text_value
           @original_text
         end
+
+        def to_s
+          @original_text
+        end
       end
     end
   end

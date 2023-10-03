@@ -12,7 +12,7 @@ module Liquidice
         end
 
         def to_s
-          children.map(&:to_s).join
+          raise NotImplementedError
         end
 
         def transform!

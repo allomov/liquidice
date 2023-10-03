@@ -2,11 +2,12 @@ module Liquidice
   class Parser
     Treetop.load(File.expand_path(File.join(File.dirname(__FILE__), 'liquidice_grammar.treetop')))
 
-    attr_accessor :strict_mode, :parser, :ast
+    attr_accessor :strict_mode, :parser, :ast, :transformed_ast, :transformer
 
     def initialize(strict_mode: false)
       @strict_mode = strict_mode
       @parser = LiquidiceGrammarParser.new
+      @transformer = Liquidice::Transformer::Transformer.new
     end
 
     def parse(wysiwyg_template)
@@ -17,13 +18,14 @@ module Liquidice
       @ast
     end
 
-    def transform(ast)
-      root_node = ast&.to_transformer_node
-      root_node&.transformer_text_value
+    def transform
+      @transformed_ast = transformer.apply(ast)
     end
 
     def parse_and_transform(wysiwyg_template)
-      transform(parse(wysiwyg_template))
+      parse(wysiwyg_template)
+      transform
+      transformed_ast.to_s
     end
   end
 end

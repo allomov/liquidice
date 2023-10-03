@@ -45,6 +45,7 @@ module Liquidice
         if node.is_a?(Liquidice::TreetopNodes::HtmlTag)
           transform_html_tag(node)
         elsif node.elements.nil? || node.elements.empty?
+          # TODO: add context if it is an opening or closing delimiter
           ::Liquidice::Transformer::Nodes::LiquidInterpolationPart.new(original_text: node.text_value)
         else
           merge_nodes_if_possible(
