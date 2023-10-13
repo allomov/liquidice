@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    liquidice (0.1.0)
+    liquidice (0.2.0)
       treetop (~> 1.4)
 
 GEM
@@ -70,6 +70,8 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  ruby
+  x86_64-linux
 
 DEPENDENCIES
   bundler (~> 2.0)
