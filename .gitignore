@@ -58,5 +58,5 @@ build-iPhoneSimulator/
 .ruby-gemspec
 .ruby-version
 .DS_Store
-.dot
-.png
+*.dot
+*.png

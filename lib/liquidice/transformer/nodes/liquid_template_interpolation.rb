@@ -5,12 +5,21 @@ module Liquidice
         def transform!
           head, tail, middle = [], [], []
 
-          opening_indent_tokens, closing_indent_tokens = true, false
+          current_interpolation_part_context = ::Liquidice::Transformer::Nodes::LiquidInterpolationPart::OPEN_DELIMITER_TYPE
           children.each do |child|
             if child.is_a?(::Liquidice::Transformer::Nodes::LiquidInterpolationPart)
               middle << child
+              current_interpolation_part_context = child.type
             elsif child.is_a?(::Liquidice::Transformer::Nodes::HtmlTag)
-              child.closing? ? tail << child : head << child
+              if current_interpolation_part_context == ::Liquidice::Transformer::Nodes::LiquidInterpolationPart::OPEN_DELIMITER_TYPE
+                head << child
+              elsif current_interpolation_part_context == ::Liquidice::Transformer::Nodes::LiquidInterpolationPart::INTERPOLATION_CONTENT_TYPE
+                child.opening? ? head << child : tail << child
+              elsif current_interpolation_part_context == ::Liquidice::Transformer::Nodes::LiquidInterpolationPart::CLOSE_DELIMITER_TYPE
+                tail << child
+              else
+                raise "Unknown interpolation part context: #{current_interpolation_part_context}"
+              end
             end
           end
 

@@ -1,7 +1,7 @@
 require 'liquidice'
 
 RSpec.describe Liquidice::Parser do
-  let(:parser) { Liquidice::Parser.new }
+  let(:parser) { Liquidice::Parser.new(strict_mode: true) }
 
   describe '#parse_from_wysiwyg' do
     context 'when the WYSIWYG template is valid' do
@@ -23,23 +23,15 @@ RSpec.describe Liquidice::Parser do
     end
   end
 
-  describe '#transform_to_liquid' do
-    it 'transforms the AST to a valid Liquid template' do
-      ast = LiquidiceGrammarParser.new.parse('<div class="wrapper">{<div class="c1"></div><div class="c2">{ v</div>a<div class="c3">rName</div>  }<div>}</div>')
-
-      liquid_template = parser.transform_to_liquid(ast)
-
-      expect(liquid_template).to eq('<div class="wrapper"><div class="c1"></div><div class="c2"><div class="c3">{{ rName }}</div></div><div></div>')
-    end
-  end
-
   describe '#parse_and_transform' do
     it 'parses the WYSIWYG template and transforms it to a valid Liquid template' do
       wysiwyg_template = '<div class="wrapper">{<div class="c1"></div><div class="c2">{ v</div>a<div class="c3">rName</div>  }<div>}</div>'
 
       liquid_template = parser.parse_and_transform(wysiwyg_template)
 
-      expect(liquid_template).to eq('<div class="wrapper"><div class="c1"></div><div class="c2"><div class="c3">{{ rName }}</div></div><div></div>')
+      expect(liquid_template).to eq(
+        '<div class="wrapper"><div class="c1"></div><div class="c2"><div class="c3">{{ varName  }}</div></div><div></div>'
+      )
     end
   end
 end

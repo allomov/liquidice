@@ -9,15 +9,19 @@ module Liquidice
         ].freeze
 
         def opening?
-          options[:type] == OPENING_TYPE
+          type == OPENING_TYPE
         end
 
         def closing?
-          options[:type] == CLOSING_TYPE
+          type == CLOSING_TYPE
         end
 
         def empty?
-          options[:type] == EMPTY_TYPE
+          type == EMPTY_TYPE
+        end
+
+        def type
+          @type ||= options[:type]
         end
 
         def validate!

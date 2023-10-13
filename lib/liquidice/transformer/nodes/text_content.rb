@@ -17,6 +17,10 @@ module Liquidice
         def can_be_merged?(other)
           other.is_a?(::Liquidice::Transformer::Nodes::TextContent)
         end
+
+        def to_s
+          @original_text
+        end
       end
     end
   end

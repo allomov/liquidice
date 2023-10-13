@@ -45,14 +45,28 @@ module Liquidice
         if node.is_a?(Liquidice::TreetopNodes::HtmlTag)
           transform_html_tag(node)
         elsif node.elements.nil? || node.elements.empty?
-          # TODO: add context if it is an opening or closing delimiter
-          ::Liquidice::Transformer::Nodes::LiquidInterpolationPart.new(original_text: node.text_value)
+          ::Liquidice::Transformer::Nodes::LiquidInterpolationPart.new(
+            original_text: node.text_value,
+            options: {
+              type: detect_liquid_interpolation_part_type(node)
+            }
+          )
         else
           merge_nodes_if_possible(
             node.elements.flat_map do |element|
               transform_liquid_template_interpolation_apply(element)
             end
           )
+        end
+      end
+
+      def detect_liquid_interpolation_part_type(node)
+        if node.has_ascendant?(type: Liquidice::TreetopNodes::LiquidOpenDelimiter, stop_node_type: Liquidice::TreetopNodes::LiquidTemplateInterpolation)
+          Liquidice::Transformer::Nodes::LiquidInterpolationPart::OPEN_DELIMITER_TYPE
+        elsif node.has_ascendant?(type: Liquidice::TreetopNodes::LiquidCloseDelimiter, stop_node_type: Liquidice::TreetopNodes::LiquidTemplateInterpolation)
+          Liquidice::Transformer::Nodes::LiquidInterpolationPart::CLOSE_DELIMITER_TYPE
+        else
+          Liquidice::Transformer::Nodes::LiquidInterpolationPart::INTERPOLATION_CONTENT_TYPE
         end
       end
 

@@ -57,14 +57,34 @@ RSpec.describe Liquidice::Transformer::Transformer do
           Liquidice::Transformer::Nodes::HtmlTag,
           Liquidice::Transformer::Nodes::HtmlTag,
           Liquidice::Transformer::Nodes::LiquidInterpolationPart,
-          Liquidice::Transformer::Nodes::HtmlTag,
           Liquidice::Transformer::Nodes::LiquidInterpolationPart,
           Liquidice::Transformer::Nodes::HtmlTag,
           Liquidice::Transformer::Nodes::LiquidInterpolationPart,
           Liquidice::Transformer::Nodes::HtmlTag,
+          Liquidice::Transformer::Nodes::LiquidInterpolationPart,
+          Liquidice::Transformer::Nodes::HtmlTag,
+          Liquidice::Transformer::Nodes::LiquidInterpolationPart,
           Liquidice::Transformer::Nodes::LiquidInterpolationPart,
           Liquidice::Transformer::Nodes::HtmlTag,
           Liquidice::Transformer::Nodes::LiquidInterpolationPart
+        ])
+
+        expect(liquid_template_interpolation_node.children.map(&:type)).to eq([
+          :open_delimiter,
+          :opening,
+          :closing,
+          :opening,
+          :open_delimiter,
+          :interpolation_content,
+          :closing,
+          :interpolation_content,
+          :opening,
+          :interpolation_content,
+          :closing,
+          :interpolation_content,
+          :close_delimiter,
+          :opening,
+          :close_delimiter
         ])
 
         expect(liquid_template_interpolation_node.children.map(&:original_text)).to eq([
@@ -72,13 +92,15 @@ RSpec.describe Liquidice::Transformer::Transformer do
           "<div class=\"c1\">",
           "</div>",
           "<div class=\"c2\">",
-          "{ v",
+          "{",
+          " v",
           "</div>",
           "a",
           "<div class=\"c3\">",
           "rName",
           "</div>",
-          "  }\n  ",
+          "  ",
+          "}\n  ",
           "<div>",
           "}"
         ])

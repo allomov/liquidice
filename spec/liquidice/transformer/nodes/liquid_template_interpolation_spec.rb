@@ -1,7 +1,6 @@
 require 'liquidice'
 
 RSpec.describe Liquidice::Transformer::Nodes::LiquidTemplateInterpolation do
-
   let(:parser) { Liquidice::Parser.new }
   let(:ast) { parser.parse(html_text) }
   let(:transformer) { Liquidice::Transformer::Transformer.new }
@@ -23,9 +22,9 @@ RSpec.describe Liquidice::Transformer::Nodes::LiquidTemplateInterpolation do
         liquid_template_interpolation_node.transform!
 
         expect(liquid_template_interpolation_node.children.map(&:class)).to eq([
-          *5.times.map { Liquidice::Transformer::Nodes::HtmlTag },
-          *6.times.map { Liquidice::Transformer::Nodes::LiquidInterpolationPart },
-          *4.times.map { Liquidice::Transformer::Nodes::HtmlTag }
+          *6.times.map { Liquidice::Transformer::Nodes::HtmlTag },
+          *7.times.map { Liquidice::Transformer::Nodes::LiquidInterpolationPart },
+          *3.times.map { Liquidice::Transformer::Nodes::HtmlTag }
         ])
       end
     end
@@ -39,13 +38,13 @@ RSpec.describe Liquidice::Transformer::Nodes::LiquidTemplateInterpolation do
         before { liquid_template_interpolation_node.transform! }
         let(:transformed_html_text) do
           <<~HTML
-            <p><img/><div><b><div>{{ variable }}</p></b></div></div>
+            <p><img/></p><div><b><div>{{ variable }}</b></div></div>
           HTML
           .strip
         end
 
-        it "returns the transformed text <p><img/><div><b><div>{{ variable }}</p></b></div></div>" do
-          expect(liquid_template_interpolation_node.to_s).to eq(html_text)
+        it "returns the transformed text <p><img/></p><div><b><div>{{ variable }}</b></div></div>" do
+          expect(liquid_template_interpolation_node.to_s).to eq(transformed_html_text)
         end
       end
     end

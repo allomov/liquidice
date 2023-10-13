@@ -7,7 +7,7 @@ module Liquidice
         end
 
         def to_s
-          children.map(&:to_s)
+          children.map(&:to_s).join("")
         end
 
         def validate!

@@ -18,14 +18,14 @@ module Liquidice
       @ast
     end
 
-    def transform
-      @transformed_ast = transformer.apply(ast)
+    def transformer_tree
+      @transformer_tree ||= transformer.apply(ast)
     end
 
     def parse_and_transform(wysiwyg_template)
       parse(wysiwyg_template)
-      transform
-      transformed_ast.to_s
+      transformer_tree.transform!
+      transformer_tree.to_s
     end
   end
 end

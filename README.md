@@ -60,57 +60,21 @@ puts valid_liquid_template
 # <div class="wrapper"><div class="c1"></div><div class="c2"><div class="c3">{{ varName  }}</div></div><div></div>
 ```
 
-```ruby
-require "liquidice"
-parser = Liquidice::Parser.new
-parser.parse("<div/>")
-```
+## Details of the transformation
 
-### Other information
+The string from WYSIWYG editor is parsed into an AST using Treetop gem. The AST is then transformed into a Transformer tree represented by `Liquidice::Transformer::Nodes::RootNode` objects. The tree is then transformed by calling `transform!` on the root node, which . The transformer tree have following structure:
 
-BNF will look in the following way:
+![transformer-tree-structure](./docs/images/transformer-tree-structure.jpg)
 
-```
-liquid-template := (liquid-tag | liquid-text)*
+While running `transform!` only Liquid Template Interpolation node changes the position of its children to separate HTML tags from Liquid interpolation instructions. The rest of the nodes are just placeholders for the HTML tags and another text. Here is a logic behind the transformation:
+- in the left subtree of the Liquid Template Interpolation node, all HTML tags are moved to the left
+- in the meedle of subtree open tags are moved to the left, and close tags are moved to the right
+- in the right subtree of the Liquid Template Interpolation node, all HTML tags are moved to the right
 
-body := (liquid-interpolation-content | content-with-tags)*
-liquid-interpolation-content := liquid-open-delimiter content-with-tags liquid-close-delimiter
-liquid-open-delimiter := liquid-open-delimiter-start any-tag* (liquid-open-delimiter-start | "%")
-liquid-close-delimiter := (liquid-close-delimiter-end | "%") any-tag* liquid-close-delimiter-end
-liquid-open-delimiter-start := "{"
-liquid-close-delimiter-end := "}"
+Here is an example of the text transition:
 
-content-with-tags := (any-tag | text-content)*
-text-content := (alphabets | digits | dash | ws)*
-any-tag := (tag-open | tag-empty | tag-close)
-tag-open := '<' tag-name ws* attr-list? ws* '>'
-tag-empty := '<' tag-name ws* attr-list? ws* '/>'
-tag-close := '</' tag-name ws* '>'
+![Transofrmation Tree Example](./docs/images/hello-world-example.jpg)
 
-attr-list := (ws+ attr)*
-attr := attr-empty | attr-unquoted | attr-single-quoted | attr-double-quoted
+## License
 
-attr-empty := attr-name
-attr-unquoted := attr-name ws* = ws* attr-unquoted-value
-attr-single-quoted := attr-name ws* = ws* ' attr-single-quoted-value '
-attr-double-quoted := attr-name ws* = ws* " attr-double-quoted-value "
-
-tag-name := (alphabets | digits | dash)+                      # Can digits become first letter?
-attr-name := /[^\s"'>/=\p{Control}]+/
-
-# These three items should not contain 'ambiguous ampersand'...
-attr-unquoted-value := /[^\s"'=<>`]+/
-attr-single-quoted-value := /[^']*/
-attr-double-quoted-value := /[^"]*/
-
-alphabets := /[a-zA-Z]/
-digits := /[0-9]/
-ws := /\s/
-dash := '-'
-```
-
-you can use treetop or racc gems to generate parser from BNF; probably treetop will be easier to adapt
-
-after that you need to write a transformer that will convert AST to valid liquid template
-
-add ruby gitingore to .gitignore
+The gem is released under the [MIT License](https://opensource.org/licenses/MIT).
