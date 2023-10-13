@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    liquidice (0.2.0)
+    liquidice (0.3.0)
       treetop (~> 1.4)
 
 GEM
